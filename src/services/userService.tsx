@@ -1,6 +1,6 @@
-import axios, { AxiosResponse } from "axios";
+import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
-import { IUser, UserResponse } from "./user.interface";
+import { IUser } from "./user.interface";
 
 const url = "http://localhost:3001/users";
 

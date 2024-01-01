@@ -3,7 +3,7 @@ import {
   QueryClient,
   QueryClientProvider,
 } from '@tanstack/react-query'
-import { AppRoutes } from './routes'
+import Layout from './components/Layout'
 
 const queryClient = new QueryClient()
 
@@ -12,7 +12,7 @@ export const App = () => {
   return (
 
     <QueryClientProvider client={queryClient}>
-      < AppRoutes />
+      <Layout />
     </QueryClientProvider>
 
   )
