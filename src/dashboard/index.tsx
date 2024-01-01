@@ -3,6 +3,7 @@ import { Container, Typography, Button, TextField } from "@mui/material";
 import { useUserMutate } from "../hooks/useUsers";
 
 const Dashboard = () => {
+  const [id, setId] = useState<string>("");
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const userMutate = useUserMutate();
@@ -16,10 +17,10 @@ const Dashboard = () => {
   };
 
   const handleAddUser = async () => {
-    const newUser = { name, email };
+    const newUser = { id, name, email };
+    setId("")
     setName("");
     setEmail("");
-
     userMutate.mutate(newUser);
   };
 

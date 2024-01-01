@@ -9,16 +9,24 @@ import {
 } from "@mui/material";
 import { useUSers } from "../hooks/useUsers";
 import { IUser } from "../services/user.interface";
+import { deleteUSer } from "../services/userService";
+import { toast } from "react-toastify";
 
 export function ListUsers() {
-  const { data, error } = useUSers();
+  const { data, error, refetch } = useUSers();
 
-  if (data === undefined) {
-    return <p>Carregando...</p>;
-  }
+  const handleDeleteUser = async (userId: string) => {
+    try {
+      await deleteUSer(userId);
+      toast.success("Usuário removido com sucesso!!!");
+      refetch();
+    } catch (error) {
+      toast.error("Erro ao excluir usuário");
+    }
+  };
 
   if (error) {
-    return <p>Error loading users</p>;
+    return <p>Erro ao carregar usuários.</p>;
   }
 
   return (
@@ -26,7 +34,7 @@ export function ListUsers() {
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell>ID</TableCell>
+            <TableCell>Perfil</TableCell>
             <TableCell>Nome</TableCell>
             <TableCell>Email</TableCell>
             <TableCell>Ações</TableCell>
@@ -35,12 +43,16 @@ export function ListUsers() {
         <TableBody>
           {data?.data ? (
             data.data.map((user: IUser) => (
-              <TableRow key={user.name}>
+              <TableRow key={user.id}>
                 <TableCell>Icone</TableCell>
                 <TableCell>{user.name}</TableCell>
                 <TableCell>{user.email}</TableCell>
                 <TableCell>
-                  <Button variant="outlined" color="secondary">
+                  <Button
+                    variant="outlined"
+                    color="secondary"
+                    onClick={() => handleDeleteUser(user.id)}
+                  >
                     Excluir
                   </Button>
                 </TableCell>
@@ -48,7 +60,7 @@ export function ListUsers() {
             ))
           ) : (
             <TableRow>
-              <TableCell colSpan={4}>Sem usuarios.</TableCell>
+              <TableCell colSpan={4}>Sem usuários.</TableCell>
             </TableRow>
           )}
         </TableBody>

@@ -1,39 +1,9 @@
 {
   "users": [
     {
-      "id": "1",
-      "name": "Usuário 1",
-      "email": "usuario1@example.com"
-    },
-    {
-      "id": "2",
-      "name": "Usuário 2",
-      "email": "usuario2@example.com"
-    },
-    {
-      "name": "Eduardo Lima",
-      "email": "eduardolima2417@gmail.com",
-      "id": "dfe68138-d404-47a2-be1e-6e7b39a0458a"
-    },
-    {
-      "name": "Juliana Queiroz",
-      "email": "juju@gmail.com",
-      "id": "2a11ceed-513a-4f16-984c-e8abb6aa72f8"
-    },
-    {
-      "name": "Neymar Junior",
-      "email": "neymar@gmail.com",
-      "id": "686a190e-4f5c-4514-b8ec-7683526e2705"
-    },
-    {
-      "name": "Glaucia dos Santos",
-      "email": "glaucia@gmail.com",
-      "id": "44111d13-5e30-4e6a-a1ab-23b8039fea35"
-    },
-    {
-      "name": "teste",
-      "email": "teste@gmail.com",
-      "id": "afce1a92-38cc-4877-8c57-4ca76c0796e5"
+      "id": "2c031b80-bb9a-4727-b2ed-a0565e63d877",
+      "name": "Eduardo Lima Castro",
+      "email": "eduardo@gmail.com"
     }
   ]
 }
