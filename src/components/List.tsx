@@ -35,8 +35,8 @@ export function ListUsers() {
         <TableBody>
           {data?.data ? (
             data.data.map((user: IUser) => (
-              <TableRow key={user.id}>
-                <TableCell>{user.id}</TableCell>
+              <TableRow key={user.name}>
+                <TableCell>Icone</TableCell>
                 <TableCell>{user.name}</TableCell>
                 <TableCell>{user.email}</TableCell>
                 <TableCell>
