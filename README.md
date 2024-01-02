@@ -17,7 +17,7 @@ Clone o Repositório:
 Instale as Dependências:
 
 ### `cd crud-admin`
-### `npm install` ou ### `yarn install`
+### `npm install` ou  `yarn install`
 
 No diretório do projeto, você pode executar:
 
