@@ -1,19 +1,10 @@
 {
   "users": [
     {
-      "id": "afbb7d99-c2f0-4849-92ed-4e5de40fb995",
-      "phone": "(92) 99188-7697",
+      "id": "ed3dc862-5044-4604-9da2-520b8de5a1e9",
+      "phone": "(92) 99188-7687",
       "name": "Eduardo Lima Castro",
       "email": "eduardolima2417@gmail.com",
-      "rg": "1111111",
-      "cpf": "704.033.072-52",
-      "birthdate": "18/12/2000"
-    },
-    {
-      "id": "ed603ea6-99ea-4f2a-9846-ef0fac0f549e",
-      "phone": "(92) 99188-7687",
-      "name": "Julina Queiroz",
-      "email": "juju@gmail.com",
       "rg": "1111111111",
       "cpf": "704.033.072-52",
       "birthdate": "18/12/2000"

@@ -20,5 +20,5 @@ export async function deleteUSer(userId: string) {
 }
 
 export async function editUSer(userId: string) {
-  await axios.put(`${url}/${userId}`);
+  await axios.patch(`${url}/${userId}`);
 }
