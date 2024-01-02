@@ -1,4 +1,4 @@
-import { TableHead, TableRow, TableBody, TextField } from "@mui/material";
+import { TableHead, TableRow, TableBody, TextField, Grid } from "@mui/material";
 import { useUSers } from "../hooks/useUsers";
 import { IUser } from "../services/user.interface";
 import { deleteUSer } from "../services/userService";
@@ -87,8 +87,36 @@ export function ListUsers() {
       <Dialog open={openModal} onClose={handleCloseModal}>
         <DialogTitle>Edit User</DialogTitle>
         <DialogContent>
-          <TextField label="Nome" name="name" margin="normal" fullWidth />
-          <TextField label="Email" name="email" margin="normal" fullWidth />
+          <Grid container spacing={2}>
+            <Grid item xs={6}>
+              <TextField label="Nome" name="name" margin="normal" fullWidth />
+            </Grid>
+            <Grid item xs={6}>
+              <TextField label="Email" name="email" margin="normal" fullWidth />
+            </Grid>
+            <Grid item xs={6}>
+              <TextField label="RG" name="rg" margin="normal" fullWidth />
+            </Grid>
+            <Grid item xs={6}>
+              <TextField label="CPF" name="cpf" margin="normal" fullWidth />
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                label="Data de Nascimento DD/MM/AAAA"
+                name="birthdate"
+                margin="normal"
+                fullWidth
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                label="Número de celular"
+                name="phone"
+                margin="normal"
+                fullWidth
+              />
+            </Grid>
+          </Grid>
           <Button variant="contained" color="primary">
             Salvar
           </Button>
@@ -97,7 +125,6 @@ export function ListUsers() {
           <Button onClick={handleCloseModal}>Fechar</Button>
         </DialogActions>
       </Dialog>
-
     </StyledTableContainer>
   );
 }
