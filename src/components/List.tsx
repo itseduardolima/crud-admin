@@ -1,19 +1,38 @@
-import {
-  Table,
-  TableHead,
-  TableRow,
-  TableCell,
-  TableBody,
-  Button,
-  TableContainer,
-} from "@mui/material";
+import { TableHead, TableRow, TableBody, TextField } from "@mui/material";
 import { useUSers } from "../hooks/useUsers";
 import { IUser } from "../services/user.interface";
 import { deleteUSer } from "../services/userService";
 import { toast } from "react-toastify";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Button,
+} from "@mui/material";
+import {
+  StyledButton,
+  StyledDeleteButton,
+  StyledTable,
+  StyledTableCell,
+  StyledTableContainer,
+  StyledTableRow,
+} from "../styles/StyledList";
+import { useState } from "react";
 
 export function ListUsers() {
   const { data, error, refetch } = useUSers();
+  const [openModal, setOpenModal] = useState(false);
+
+  const handleOpenModal = () => {
+    setOpenModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setOpenModal(false);
+  };
 
   const handleDeleteUser = async (userId: string) => {
     try {
@@ -30,41 +49,55 @@ export function ListUsers() {
   }
 
   return (
-    <TableContainer>
-      <Table>
+    <StyledTableContainer>
+      <StyledTable>
         <TableHead>
           <TableRow>
-            <TableCell>Perfil</TableCell>
-            <TableCell>Nome</TableCell>
-            <TableCell>Email</TableCell>
-            <TableCell>Ações</TableCell>
+            <StyledTableCell>Nome</StyledTableCell>
+            <StyledTableCell>Email</StyledTableCell>
+            <StyledTableCell>Ações</StyledTableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {data?.data ? (
             data.data.map((user: IUser) => (
-              <TableRow key={user.id}>
-                <TableCell>Icone</TableCell>
-                <TableCell>{user.name}</TableCell>
-                <TableCell>{user.email}</TableCell>
-                <TableCell>
-                  <Button
-                    variant="outlined"
-                    color="secondary"
-                    onClick={() => handleDeleteUser(user.id)}
-                  >
-                    Excluir
-                  </Button>
-                </TableCell>
-              </TableRow>
+              <StyledTableRow key={user.id}>
+                <StyledTableCell>{user.name}</StyledTableCell>
+                <StyledTableCell>{user.email}</StyledTableCell>
+                <StyledTableCell>
+                  <StyledButton onClick={handleOpenModal}>
+                    <EditIcon />
+                  </StyledButton>
+                  <StyledDeleteButton onClick={() => handleDeleteUser(user.id)}>
+                    <DeleteIcon />
+                  </StyledDeleteButton>
+                </StyledTableCell>
+              </StyledTableRow>
             ))
           ) : (
-            <TableRow>
-              <TableCell colSpan={4}>Sem usuários.</TableCell>
-            </TableRow>
+            <StyledTableRow>
+              <StyledTableCell colSpan={3}>Sem usuários.</StyledTableCell>
+            </StyledTableRow>
           )}
         </TableBody>
-      </Table>
-    </TableContainer>
+      </StyledTable>
+
+      {/* MODAL EDIT*/}
+
+      <Dialog open={openModal} onClose={handleCloseModal}>
+        <DialogTitle>Edit User</DialogTitle>
+        <DialogContent>
+          <TextField label="Nome" name="name" margin="normal" fullWidth />
+          <TextField label="Email" name="email" margin="normal" fullWidth />
+          <Button variant="contained" color="primary">
+            Salvar
+          </Button>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseModal}>Fechar</Button>
+        </DialogActions>
+      </Dialog>
+
+    </StyledTableContainer>
   );
 }
