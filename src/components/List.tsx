@@ -1,7 +1,7 @@
 import { TableHead, TableRow, TableBody, TextField, Grid, Menu, IconButton,  MenuItem } from "@mui/material";
 import { useUSers } from "../hooks/useUsers";
 import { IUser } from "../services/user.interface";
-import { deleteUSer, editUSer } from "../services/userService";
+import { deleteUSer } from "../services/userService";
 import { toast } from "react-toastify";
 import ListIcon from "@mui/icons-material/List";
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button } from "@mui/material";
@@ -56,7 +56,7 @@ export function ListUsers() {
     Object.keys(anchorEl).forEach((userId) => {
       handleCloseOptions(userId);
     });
-  }, [data]);
+  }, [data, anchorEl]);
 
   if (error) {
     return <p>Erro ao carregar usuários.</p>;
