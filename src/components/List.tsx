@@ -1,29 +1,38 @@
-import { TableHead, TableRow, TableBody, TextField, Grid, Menu, IconButton, MenuItem, TableCell, Table } from "@mui/material";
+import {
+  TableHead,
+  TableRow,
+  TableBody,
+  TableCell,
+  Table,
+} from "@mui/material";
 import { useUSers } from "../hooks/useUsers";
 import { IUser } from "../services/user.interface";
 import { deleteUSer, editUSer } from "../services/userService";
 import { toast } from "react-toastify";
-import ListIcon from "@mui/icons-material/List";
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button } from "@mui/material";
-import { Data, Info, ModalContainer, StyledTableContainer, StyledTableRow, TitleModal } from "../styles/StyledList";
+import { StyledTableContainer, StyledTableRow } from "../styles/StyledList";
 import { useEffect, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
+import UserTableRow from "./UserTableRow";
+import UserEditModal from "./Modal/EditModal";
+import UserViewModal from "./Modal/ViewModal";
 
 export function ListUsers() {
-
   const { data, error, refetch } = useUSers();
   const [openModalEdit, setOpenModalEdit] = useState(false);
   const [openModalView, setOpenModalView] = useState(false);
   const [selectedUser, setSelectedUser] = useState<IUser | null>(null);
-  const [anchorEl, setAnchorEl] = useState<Record<string, HTMLElement | null>>({});
+  const [anchorEl, setAnchorEl] = useState<Record<string, HTMLElement | null>>(
+    {}
+  );
 
-  const handleOpenOptions = ( event: React.MouseEvent<HTMLButtonElement>, userId: string ) => {
-
+  const handleOpenOptions = (
+    event: React.MouseEvent<HTMLButtonElement>,
+    userId: string
+  ) => {
     setAnchorEl((prevAnchorEl) => ({
       ...prevAnchorEl,
       [userId]: event.currentTarget,
     }));
-
   };
 
   const handleCloseOptions = (userId: string) => {
@@ -50,8 +59,11 @@ export function ListUsers() {
     setOpenModalView(false);
   };
 
-  const editUserMutation = useMutation< void, Error, { userId: string; userData: IUser } > ({
-
+  const editUserMutation = useMutation<
+    void,
+    Error,
+    { userId: string; userData: IUser }
+  >({
     mutationFn: async ({ userId, userData }) => {
       await editUSer(userId, userData);
     },
@@ -90,7 +102,10 @@ export function ListUsers() {
     handleCloseOptions(userId);
   };
 
-  const handleInputChange = ( e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, field: keyof IUser ) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    field: keyof IUser
+  ) => {
     const { value } = e.target;
 
     setSelectedUser((prevUser) => ({
@@ -111,9 +126,7 @@ export function ListUsers() {
 
   return (
     <StyledTableContainer>
-
       <Table>
-
         <TableHead>
           <TableRow>
             <TableCell>Nome</TableCell>
@@ -121,40 +134,19 @@ export function ListUsers() {
             <TableCell>Ações</TableCell>
           </TableRow>
         </TableHead>
-
         <TableBody>
           {data?.data ? (
             data.data.map((user: IUser) => (
-
-              <StyledTableRow key={user.id}>
-                <TableCell>{user.name}</TableCell>
-                <TableCell>{user.email}</TableCell>
-
-                <TableCell>
-                  <IconButton onClick={(e) => handleOpenOptions(e, user.id)}>
-                    <ListIcon />
-                  </IconButton>
-
-                  <Menu
-                    id={`options-menu-${user.id}`}
-                    anchorEl={anchorEl[user.id]}
-                    open={Boolean(anchorEl[user.id])}
-                    onClose={() => handleCloseOptions(user.id)}
-                  >
-                    <MenuItem onClick={() => handleOpenModalEdit(user)}>
-                      Editar
-                    </MenuItem>
-                    <MenuItem onClick={() => handleDeleteUser(user.id)}>
-                      Excluir
-                    </MenuItem>
-
-                    <MenuItem onClick={() => handleOpenModalView(user)}>
-                      Visualizar
-                    </MenuItem>
-                  </Menu>
-                  
-                </TableCell>
-              </StyledTableRow>
+              <UserTableRow
+                key={user.id}
+                user={user}
+                anchorEl={anchorEl}
+                handleOpenOptions={handleOpenOptions}
+                handleOpenModalEdit={handleOpenModalEdit}
+                handleDeleteUser={handleDeleteUser}
+                handleOpenModalView={handleOpenModalView}
+                handleCloseOptions={handleCloseOptions}
+              />
             ))
           ) : (
             <StyledTableRow>
@@ -166,104 +158,21 @@ export function ListUsers() {
 
       {/* MODAL EDIT*/}
 
-      <Dialog open={openModalEdit} onClose={handleCloseModal}>
-        <DialogTitle>Cadastro de {selectedUser?.name} </DialogTitle>
-        <DialogContent>
-          <Grid container spacing={2}>
-            <Grid item xs={6}>
-              <TextField
-                label="Nome"
-                name="name"
-                margin="normal"
-                fullWidth
-                value={selectedUser?.name || ""}
-                onChange={(e) => handleInputChange(e, "name")}
-              />
-            </Grid>
-
-            <Grid item xs={6}>
-              <TextField
-                label="Email"
-                name="email"
-                margin="normal"
-                fullWidth
-                value={selectedUser?.email || ""}
-                onChange={(e) => handleInputChange(e, "email")}
-              />
-            </Grid>
-
-            <Grid item xs={6}>
-              <TextField
-                label="RG"
-                name="rg"
-                margin="normal"
-                value={selectedUser?.rg || ""}
-                onChange={(e) => handleInputChange(e, "rg")}
-              />
-            </Grid>
-
-            <Grid item xs={6}>
-              <TextField
-                label="CPF"
-                name="cpf"
-                margin="normal"
-                value={selectedUser?.cpf || ""}
-                onChange={(e) => handleInputChange(e, "cpf")}
-              />
-            </Grid>
-
-            <Grid item xs={6}>
-              <TextField
-                label="Data de Nascimento DD/MM/AAAA"
-                name="birthdate"
-                margin="normal"
-                value={selectedUser?.birthdate || ""}
-                onChange={(e) => handleInputChange(e, "birthdate")}
-              />
-            </Grid>
-
-            <Grid item xs={6}>
-              <TextField
-                label="Número de celular"
-                name="phone"
-                margin="normal"
-                value={selectedUser?.phone || ""}
-                onChange={(e) => handleInputChange(e, "phone")}
-              />
-            </Grid>
-          </Grid>
-
-          <Button variant="contained" color="primary" onClick={handleSaveEdit}>
-            Salvar
-          </Button>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseModal}>Fechar</Button>
-        </DialogActions>
-      </Dialog>
+      <UserEditModal
+        open={openModalEdit}
+        handleCloseModal={handleCloseModal}
+        selectedUser={selectedUser}
+        handleInputChange={handleInputChange}
+        handleSaveEdit={handleSaveEdit}
+      />
 
       {/* MODAL View*/}
 
-      <Dialog open={openModalView}>
-        <TitleModal>Dados do usuário</TitleModal>
-        <DialogContent>
-          <ModalContainer>
-            <Info>
-              <Data>
-                <span>Nome: {selectedUser?.name} </span>
-                <span>Email: {selectedUser?.email} </span>
-                <span>Data de Nascimento: {selectedUser?.birthdate} </span>
-                <span>Número de celular: {selectedUser?.phone} </span>
-                <span>CPF: {selectedUser?.cpf} </span>
-                <span>RG: {selectedUser?.rg} </span>
-              </Data>
-            </Info>
-          </ModalContainer>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseModal}>Fechar</Button>
-        </DialogActions>
-      </Dialog>
+      <UserViewModal
+        open={openModalView}
+        handleCloseModal={handleCloseModal}
+        selectedUser={selectedUser}
+      />
     </StyledTableContainer>
   );
 }
