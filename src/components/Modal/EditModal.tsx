@@ -7,7 +7,7 @@ const UserEditModal: React.FC<UserEditModalProps> = ({ open, handleCloseModal, s
   return (
 
     <Dialog open={open} onClose={handleCloseModal}>
-      <DialogTitle>Cadastro de {selectedUser?.name} </DialogTitle>
+      <DialogTitle>Edição de cadastro</DialogTitle>
       <DialogContent>
 
         <Grid container spacing={2}>
@@ -80,7 +80,6 @@ const UserEditModal: React.FC<UserEditModalProps> = ({ open, handleCloseModal, s
         
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleSaveEdit}>Salvar</Button>
         <Button onClick={handleCloseModal}>Fechar</Button>
       </DialogActions>
     </Dialog>
