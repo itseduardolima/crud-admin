@@ -18,7 +18,7 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import { mainListItems, secondaryListItems } from "./Sidebar";
 import { ListUsers } from "./List";
-import Dashboard from "../dashboard";
+import Form from "../form";
 
 const drawerWidth: number = 240;
 
@@ -107,7 +107,7 @@ export default function Layout() {
               noWrap
               sx={{ flexGrow: 1 }}
             >
-              Dashboard
+              Admin
             </Typography>
             <IconButton color="inherit">
               <Badge badgeContent={4} color="secondary">
@@ -161,7 +161,7 @@ export default function Layout() {
                     
                   }}
                 >
-                  <Dashboard />
+                  <Form />
                 </Paper>
               </Grid>
               

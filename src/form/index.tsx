@@ -10,7 +10,7 @@ import {
 } from "../utils/Validate";
 import { toast } from "react-toastify";
 
-const Dashboard: React.FC = () => {
+const Form = () => {
   const [user, setUser] = useState<IUser>({
     id: "",
     phone: "",
@@ -156,4 +156,4 @@ const Dashboard: React.FC = () => {
   );
 };
 
-export default Dashboard;
+export default Form;
