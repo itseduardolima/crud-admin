@@ -3,7 +3,6 @@ import {
   Table,
   TableRow,
   TableCell,
-  Button,
   TableContainer,
 } from "@mui/material";
 
@@ -29,22 +28,43 @@ export const StyledTableCell = styled(TableCell)`
   color: #333;
 `;
 
-export const StyledButton = styled(Button)`
-  margin-right: 8px;
-  background-color: #4caf50;
-  color: #fff;
-  padding: 5px;
+export const ModalContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+`;
 
-  &:hover {
-    background-color: #45a049;
+export const Info = styled.div`
+  display: flex;
+  gap: 100px;
+
+  @media (max-width: 450px) {
+    gap: 10px;
   }
 `;
 
-export const StyledDeleteButton = styled(Button)`
-  color: #fff;
-  background-color: #e74c3c;
+export const Data = styled.div`
+  display: flex;
+  flex-direction: column;
 
-  &:hover {
-    background-color: #c0392b;
+  > span {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    font-family: sans-serif;
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+
+    @media (max-width: 450px) {
+      font-size: 0.7rem;
+    }
   }
+`;
+
+export const TitleModal = styled.h2`
+  padding-bottom: 5px;
+  border-bottom: 2px solid black;
+  width: 300px;
+  padding: 20px;
+  font-family: sans-serif;
 `;

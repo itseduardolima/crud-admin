@@ -1,23 +1,52 @@
-import { TableHead, TableRow, TableBody, TextField, Grid, Menu, IconButton,  MenuItem } from "@mui/material";
+import {
+  TableHead,
+  TableRow,
+  TableBody,
+  TextField,
+  Grid,
+  Menu,
+  IconButton,
+  MenuItem,
+} from "@mui/material";
 import { useUSers } from "../hooks/useUsers";
 import { IUser } from "../services/user.interface";
 import { deleteUSer, editUSer } from "../services/userService";
 import { toast } from "react-toastify";
 import ListIcon from "@mui/icons-material/List";
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button } from "@mui/material";
-import { StyledTable, StyledTableCell, StyledTableContainer, StyledTableRow } from "../styles/StyledList";
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Button,
+} from "@mui/material";
+import {
+  Data,
+  Info,
+  ModalContainer,
+  StyledTable,
+  StyledTableCell,
+  StyledTableContainer,
+  StyledTableRow,
+  TitleModal,
+} from "../styles/StyledList";
 import { useEffect, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 
-export function ListUsers() {
 
+export function ListUsers() {
   const { data, error, refetch } = useUSers();
   const [openModalEdit, setOpenModalEdit] = useState(false);
+  const [openModalView, setOpenModalView] = useState(false);
   const [selectedUser, setSelectedUser] = useState<IUser | null>(null);
-  const [anchorEl, setAnchorEl] = useState<Record<string, HTMLElement | null>>( {} );
+  const [anchorEl, setAnchorEl] = useState<Record<string, HTMLElement | null>>(
+    {}
+  );
 
-
-  const handleOpenOptions = ( event: React.MouseEvent<HTMLButtonElement>, userId: string ) => {
+  const handleOpenOptions = (
+    event: React.MouseEvent<HTMLButtonElement>,
+    userId: string
+  ) => {
     setAnchorEl((prevAnchorEl) => ({
       ...prevAnchorEl,
       [userId]: event.currentTarget,
@@ -37,16 +66,24 @@ export function ListUsers() {
     handleCloseOptions(user.id);
   };
 
-  const handleCloseModal = () => {
-    setSelectedUser(null);
-    setOpenModalEdit(false);
+  const handleOpenModalView = (user: IUser) => {
+    setSelectedUser(user);
+    setOpenModalView(true);
+    handleCloseOptions(user.id);
   };
 
-  const editUserMutation = useMutation<void, Error, { userId: string; userData: Partial<IUser> }>({
+  const handleCloseModal = () => {
+    setOpenModalEdit(false);
+    setOpenModalView(false);
+  };
 
+  const editUserMutation = useMutation<
+    void,
+    Error,
+    { userId: string; userData: Partial<IUser> }
+  >({
     mutationFn: async ({ userId, userData }) => {
       await editUSer(userId, userData);
-      
     },
     onSuccess: () => {
       toast.success("Usuário editado com sucesso!");
@@ -57,7 +94,7 @@ export function ListUsers() {
       toast.error(`Erro ao editar usuário: ${error.message}`);
     },
   });
-  
+
   const handleSaveEdit = async () => {
     if (selectedUser) {
       try {
@@ -83,10 +120,12 @@ export function ListUsers() {
     handleCloseOptions(userId);
   };
 
-  const handleInputChange = ( e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-    field: keyof IUser ) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    field: keyof IUser
+  ) => {
     const { value } = e.target;
-  
+
     setSelectedUser((prevUser) => ({
       ...prevUser!,
       [field]: value,
@@ -94,7 +133,6 @@ export function ListUsers() {
   };
 
   useEffect(() => {
-   
     Object.keys(anchorEl).forEach((userId) => {
       handleCloseOptions(userId);
     });
@@ -109,18 +147,14 @@ export function ListUsers() {
       <StyledTable>
         <TableHead>
           <TableRow>
-
             <StyledTableCell>Nome</StyledTableCell>
             <StyledTableCell>Email</StyledTableCell>
             <StyledTableCell>Ações</StyledTableCell>
-
           </TableRow>
         </TableHead>
         <TableBody>
-
           {data?.data ? (
             data.data.map((user: IUser) => (
-
               <StyledTableRow key={user.id}>
                 <StyledTableCell>{user.name}</StyledTableCell>
                 <StyledTableCell>{user.email}</StyledTableCell>
@@ -142,8 +176,11 @@ export function ListUsers() {
                     <MenuItem onClick={() => handleDeleteUser(user.id)}>
                       Excluir
                     </MenuItem>
-                  </Menu>
 
+                    <MenuItem onClick={() => handleOpenModalView(user)}>
+                      Visualizar
+                    </MenuItem>
+                  </Menu>
                 </StyledTableCell>
               </StyledTableRow>
             ))
@@ -158,9 +195,8 @@ export function ListUsers() {
       {/* MODAL EDIT*/}
 
       <Dialog open={openModalEdit} onClose={handleCloseModal}>
-        <DialogTitle>Edit User</DialogTitle>
+        <DialogTitle>Cadastro de {selectedUser?.name} </DialogTitle>
         <DialogContent>
-
           <Grid container spacing={2}>
             <Grid item xs={6}>
               <TextField
@@ -223,13 +259,34 @@ export function ListUsers() {
                 onChange={(e) => handleInputChange(e, "phone")}
               />
             </Grid>
-
           </Grid>
 
-          <Button variant="contained" color="primary" onClick={handleSaveEdit} >
+          <Button variant="contained" color="primary" onClick={handleSaveEdit}>
             Salvar
           </Button>
-          
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseModal}>Fechar</Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* MODAL View*/}
+
+      <Dialog open={openModalView}>
+        <TitleModal>Dados do usuário</TitleModal>
+        <DialogContent>
+          <ModalContainer>
+            <Info>
+              <Data>
+                <span>Nome: {selectedUser?.name} </span>
+                <span>Email: {selectedUser?.email} </span>
+                <span>Data de Nascimento: {selectedUser?.birthdate} </span>
+                <span>Número de celular: {selectedUser?.phone} </span>
+                <span>CPF: {selectedUser?.cpf} </span>
+                <span>RG: {selectedUser?.rg} </span>
+              </Data>
+            </Info>
+          </ModalContainer>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseModal}>Fechar</Button>
