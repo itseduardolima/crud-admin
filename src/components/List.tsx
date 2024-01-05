@@ -1,10 +1,4 @@
-import {
-  TableHead,
-  TableRow,
-  TableBody,
-  TableCell,
-  Table,
-} from "@mui/material";
+import { TableHead, TableRow, TableBody, TableCell, Table } from "@mui/material";
 import { useUSers } from "../hooks/useUsers";
 import { IUser } from "../services/user.interface";
 import { deleteUSer, editUSer } from "../services/userService";
@@ -21,14 +15,19 @@ export function ListUsers() {
   const [openModalEdit, setOpenModalEdit] = useState(false);
   const [openModalView, setOpenModalView] = useState(false);
   const [selectedUser, setSelectedUser] = useState<IUser | null>(null);
-  const [anchorEl, setAnchorEl] = useState<Record<string, HTMLElement | null>>(
-    {}
-  );
+  const [anchorEl, setAnchorEl] = useState<Record<string, HTMLElement | null>>({});
 
-  const handleOpenOptions = (
-    event: React.MouseEvent<HTMLButtonElement>,
-    userId: string
-  ) => {
+  const handleInputChange = ( e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, field: keyof IUser ) => {
+    
+    const { value } = e.target;
+
+    setSelectedUser((prevUser) => ({
+      ...prevUser!,
+      [field]: value,
+    }));
+  };
+
+  const handleOpenOptions = ( event: React.MouseEvent<HTMLButtonElement>, userId: string ) => {
     setAnchorEl((prevAnchorEl) => ({
       ...prevAnchorEl,
       [userId]: event.currentTarget,
@@ -59,11 +58,7 @@ export function ListUsers() {
     setOpenModalView(false);
   };
 
-  const editUserMutation = useMutation<
-    void,
-    Error,
-    { userId: string; userData: IUser }
-  >({
+  const editUserMutation = useMutation< void, Error, { userId: string; userData: IUser } >({
     mutationFn: async ({ userId, userData }) => {
       await editUSer(userId, userData);
     },
@@ -102,18 +97,6 @@ export function ListUsers() {
     handleCloseOptions(userId);
   };
 
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-    field: keyof IUser
-  ) => {
-    const { value } = e.target;
-
-    setSelectedUser((prevUser) => ({
-      ...prevUser!,
-      [field]: value,
-    }));
-  };
-
   useEffect(() => {
     Object.keys(anchorEl).forEach((userId) => {
       handleCloseOptions(userId);
@@ -137,6 +120,7 @@ export function ListUsers() {
         <TableBody>
           {data?.data ? (
             data.data.map((user: IUser) => (
+
               <UserTableRow
                 key={user.id}
                 user={user}
@@ -147,6 +131,7 @@ export function ListUsers() {
                 handleOpenModalView={handleOpenModalView}
                 handleCloseOptions={handleCloseOptions}
               />
+              
             ))
           ) : (
             <StyledTableRow>
@@ -154,9 +139,7 @@ export function ListUsers() {
             </StyledTableRow>
           )}
         </TableBody>
-      </Table>
-
-      {/* MODAL EDIT*/}
+      </Table> 
 
       <UserEditModal
         open={openModalEdit}
@@ -165,8 +148,6 @@ export function ListUsers() {
         handleInputChange={handleInputChange}
         handleSaveEdit={handleSaveEdit}
       />
-
-      {/* MODAL View*/}
 
       <UserViewModal
         open={openModalView}
