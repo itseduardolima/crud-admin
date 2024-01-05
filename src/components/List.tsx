@@ -1,56 +1,29 @@
-import {
-  TableHead,
-  TableRow,
-  TableBody,
-  TextField,
-  Grid,
-  Menu,
-  IconButton,
-  MenuItem,
-} from "@mui/material";
+import { TableHead, TableRow, TableBody, TextField, Grid, Menu, IconButton, MenuItem, TableCell, Table } from "@mui/material";
 import { useUSers } from "../hooks/useUsers";
 import { IUser } from "../services/user.interface";
 import { deleteUSer, editUSer } from "../services/userService";
 import { toast } from "react-toastify";
 import ListIcon from "@mui/icons-material/List";
-import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Button,
-} from "@mui/material";
-import {
-  Data,
-  Info,
-  ModalContainer,
-  StyledTable,
-  StyledTableCell,
-  StyledTableContainer,
-  StyledTableRow,
-  TitleModal,
-} from "../styles/StyledList";
+import { Dialog, DialogTitle, DialogContent, DialogActions, Button } from "@mui/material";
+import { Data, Info, ModalContainer, StyledTableContainer, StyledTableRow, TitleModal } from "../styles/StyledList";
 import { useEffect, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 
-
 export function ListUsers() {
+
   const { data, error, refetch } = useUSers();
   const [openModalEdit, setOpenModalEdit] = useState(false);
   const [openModalView, setOpenModalView] = useState(false);
   const [selectedUser, setSelectedUser] = useState<IUser | null>(null);
-  const [anchorEl, setAnchorEl] = useState<Record<string, HTMLElement | null>>(
-    {}
-  );
+  const [anchorEl, setAnchorEl] = useState<Record<string, HTMLElement | null>>({});
 
-  const handleOpenOptions = (
-    event: React.MouseEvent<HTMLButtonElement>,
-    userId: string
-  ) => {
+  const handleOpenOptions = ( event: React.MouseEvent<HTMLButtonElement>, userId: string ) => {
+
     setAnchorEl((prevAnchorEl) => ({
       ...prevAnchorEl,
       [userId]: event.currentTarget,
     }));
+
   };
 
   const handleCloseOptions = (userId: string) => {
@@ -77,11 +50,8 @@ export function ListUsers() {
     setOpenModalView(false);
   };
 
-  const editUserMutation = useMutation<
-    void,
-    Error,
-    { userId: string; userData: Partial<IUser> }
-  >({
+  const editUserMutation = useMutation< void, Error, { userId: string; userData: IUser } > ({
+
     mutationFn: async ({ userId, userData }) => {
       await editUSer(userId, userData);
     },
@@ -120,10 +90,7 @@ export function ListUsers() {
     handleCloseOptions(userId);
   };
 
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-    field: keyof IUser
-  ) => {
+  const handleInputChange = ( e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, field: keyof IUser ) => {
     const { value } = e.target;
 
     setSelectedUser((prevUser) => ({
@@ -144,22 +111,26 @@ export function ListUsers() {
 
   return (
     <StyledTableContainer>
-      <StyledTable>
+
+      <Table>
+
         <TableHead>
           <TableRow>
-            <StyledTableCell>Nome</StyledTableCell>
-            <StyledTableCell>Email</StyledTableCell>
-            <StyledTableCell>Ações</StyledTableCell>
+            <TableCell>Nome</TableCell>
+            <TableCell>Email</TableCell>
+            <TableCell>Ações</TableCell>
           </TableRow>
         </TableHead>
+
         <TableBody>
           {data?.data ? (
             data.data.map((user: IUser) => (
-              <StyledTableRow key={user.id}>
-                <StyledTableCell>{user.name}</StyledTableCell>
-                <StyledTableCell>{user.email}</StyledTableCell>
 
-                <StyledTableCell>
+              <StyledTableRow key={user.id}>
+                <TableCell>{user.name}</TableCell>
+                <TableCell>{user.email}</TableCell>
+
+                <TableCell>
                   <IconButton onClick={(e) => handleOpenOptions(e, user.id)}>
                     <ListIcon />
                   </IconButton>
@@ -181,16 +152,17 @@ export function ListUsers() {
                       Visualizar
                     </MenuItem>
                   </Menu>
-                </StyledTableCell>
+                  
+                </TableCell>
               </StyledTableRow>
             ))
           ) : (
             <StyledTableRow>
-              <StyledTableCell colSpan={3}>Sem usuários.</StyledTableCell>
+              <TableCell colSpan={3}>Sem usuários.</TableCell>
             </StyledTableRow>
           )}
         </TableBody>
-      </StyledTable>
+      </Table>
 
       {/* MODAL EDIT*/}
 

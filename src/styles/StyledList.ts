@@ -1,31 +1,17 @@
 import styled from "styled-components";
-import {
-  Table,
-  TableRow,
-  TableCell,
-  TableContainer,
-} from "@mui/material";
+import { TableRow, TableContainer } from "@mui/material";
 
 export const StyledTableContainer = styled(TableContainer)`
-  margin: 20px;
+  background-color: white;
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-`;
-
-export const StyledTable = styled(Table)`
-  width: 100%;
 `;
 
 export const StyledTableRow = styled(TableRow)`
   &:nth-child(even) {
     background-color: #f9f9f9;
   }
-`;
-
-export const StyledTableCell = styled(TableCell)`
-  font-weight: bold;
-  color: #333;
 `;
 
 export const ModalContainer = styled.div`
