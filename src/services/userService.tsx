@@ -19,6 +19,6 @@ export async function deleteUSer(userId: string) {
   await axios.delete(`${url}/${userId}`);
 }
 
-export async function editUSer(userId: string) {
-  await axios.patch(`${url}/${userId}`);
+export async function editUSer(userId: string, userData: Partial<IUser>) {
+  await axios.patch(`${url}/${userId}`, userData);
 }
